@@ -34,7 +34,6 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     steps:
-      
       - name: Checkout Private Mod Code
         uses: actions/checkout@v4
         with:
@@ -55,7 +54,13 @@ jobs:
       contents: write
 
     steps:
-       
+      # FIX: Added checkout step so the combine action can access the repository source files
+      - name: Checkout Private Mod Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          repository: 'SIMILARITIES-FOR-DIFFERENCES/chatgdfork'
+        
       - uses: geode-sdk/build-geode-mod/combine@main
         id: build
         with:

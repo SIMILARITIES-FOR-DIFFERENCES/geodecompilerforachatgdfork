@@ -34,7 +34,12 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     steps:
-      - uses: actions/checkout@v4
+      
+      - name: Checkout Private Mod Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          repository: 'SIMILARITIES_FOR_DIFFERENCES/chatgdfork' # <-- CHANGE THIS to your username/repo
 
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
@@ -50,8 +55,11 @@ jobs:
       contents: write
 
     steps:
+      
       - uses: geode-sdk/build-geode-mod/combine@main
         id: build
+        with:
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
 
       - name: Debug
         run: |
@@ -64,26 +72,14 @@ jobs:
           name: Build Output
           path: ${{ steps.build.outputs.build-output }}
 
+      
       - name: Upload to nightly release
-        if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: nightly
           name: Nightly Build
           prerelease: true
-          body: Automated nightly build
-          files: ${{ steps.build.outputs.build-output }}/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload to dev nightly release
-        if: github.ref == 'refs/heads/dev'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: nightly-dev
-          name: Dev Nightly Build
-          prerelease: true
-          body: Automated dev nightly build
+          body: Automated multi-platform nightly build
           files: ${{ steps.build.outputs.build-output }}/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-          repository: 'SIMILARITIES_FOR_DIFFERENCES/chatgdfork'
+          repository: 'SIMILARITIES-FOR-DIFFERENCES/chatgdfork'
 
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
